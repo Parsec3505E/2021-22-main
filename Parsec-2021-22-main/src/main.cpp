@@ -2,6 +2,7 @@
 
 void initialize() {
 	pros::lcd::initialize();
+
 }
 
 void disabled() {}
@@ -9,10 +10,12 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
-	pros::lcd::initialize();
 
 }
 
 void opcontrol() {
+	pros::Motor spinny(1);
+	spinny.move(127);
+
 
 }
