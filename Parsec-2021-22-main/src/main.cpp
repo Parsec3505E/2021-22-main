@@ -13,6 +13,8 @@ void autonomous() {}
 void opcontrol() {
 	pros::Controller master(CONTROLLER_MASTER);
 
+	pros::ADIDigitalOut piston('A');
+
 	pros::Motor rightFront(1);
 	pros::Motor rightBack(2);
 	pros::Motor leftFront(3);
@@ -26,9 +28,16 @@ void opcontrol() {
 		int left = power - turn;
 
 		rightFront.move(right);
-		rightBsck.move(right);
+		rightBack.move(right);
 		leftFront.move(left);
 		leftBack.move(left);
+
+		if (master.get_digital_new_press(DIGITAL_A)) {
+			piston.set_value(true);
+		}
+		else {
+			piston.set_value(false);
+		}
 
 		pros::delay(2);
 	}
