@@ -1,6 +1,4 @@
-#include "main.h"
-#include <cmath>
-#include <ctime>
+#include "time.h"
 
 class Rate_Limiter {
 
@@ -9,7 +7,6 @@ class Rate_Limiter {
     double cap;
     double prev_power;
     time_t prev_time;
-
 
 
   Rate_Limiter(double cap) {
@@ -28,8 +25,11 @@ class Rate_Limiter {
 
     double rate = delta_power / delta_time;
 
-    if (rate > cap || rate < cap) {
+    if (rate > cap) {
       rate = cap;
+    }
+    else if(rate < -cap){
+      rate = -cap;
     }
     else {
       rate = rate;
@@ -37,8 +37,8 @@ class Rate_Limiter {
 
     new_power = rate * delta_time;
 
-    curr_time = prev_time;
-    req_power = prev_power;
+    prev_time = curr_time;
+    prev_power = req_power;
 
     return new_power;
   }

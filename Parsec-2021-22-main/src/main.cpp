@@ -28,10 +28,19 @@ void opcontrol() {
 
 	pros::Motor arm(19);
 
+	pros::Motor intake(10);
+
+	outtake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+
 	int piston_state = 0;
+
+	int intake_state = 0;
 
 	while (true) {
 		bool piston_button = master.get_digital_new_press(DIGITAL_B);
+		bool intake_button = master.get_digital_new_press(DIGITAL_UP);
+		bool outtake_button = master.get_digital_new_press(DIGITAL_DOWN);
+		bool intake_stop = master.get_digital_new_press(DIGITAL_LEFT);
 
 		//Drive Control
 		int power = master.get_analog(ANALOG_RIGHT_Y);
@@ -69,28 +78,40 @@ void opcontrol() {
 
 		//Spinner Control
 		if (master.get_digital(DIGITAL_L1)) {
-			spinner.move_velocity(100);
+			outtake.move_velocity(20);
 		}
 		else if (master.get_digital(DIGITAL_L2)) {
+			outtake.move_velocity(-20);
+		}
+		else {
+			outtake.move_velocity(0);
+			std::cout << (outtake.get_brake_mode());
+
+		}
+
+		//Stick/outtake Controller
+		if (master.get_digital(DIGITAL_Y)) {
+			spinner.move_velocity(100);
+		}
+		else if (master.get_digital(DIGITAL_A)) {
 			spinner.move_velocity(-100);
 		}
 		else {
 			spinner.move_velocity(0);
 		}
 
-		//Stick/outtake Controller
-		if (master.get_digital(DIGITAL_Y)) {
-			spinner.move_velocity(50);
+		if(intake_button) {
+			intake.move(127);
 		}
-		else if (master.get_digital(DIGITAL_A)) {
-			spinner.move_velocity(-50);
+		else if(outtake_button) {
+			intake.move(-127);
 		}
-		else {
-			spinner.move_velocity(0);
+		else if(intake_stop){
+			intake.move(0);
 		}
 
 		pros::delay(2);
 
-
 	}
+
 }

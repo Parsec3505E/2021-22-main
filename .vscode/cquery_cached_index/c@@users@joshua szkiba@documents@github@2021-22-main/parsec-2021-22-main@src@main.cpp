@@ -28,6 +28,8 @@ void opcontrol() {
 
 	pros::Motor arm(19);
 
+	pros::Motor intake(10);
+
 	int piston_state = 0;
 
 	while (true) {
@@ -87,6 +89,16 @@ void opcontrol() {
 		}
 		else {
 			spinner.move_velocity(0);
+		}
+
+		if (master.get_digital(DIGITAL_UP)) {
+			intake.move(127);
+		}
+		else if (master.get_digital(DIGITAL_DOWN)) {
+			intake.move(-127);
+		}
+		else {
+			intake.move(0);
 		}
 
 		pros::delay(2);
